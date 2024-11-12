@@ -1,0 +1,38 @@
+#A* pseudocode
+
+function AStarGraphSearch(graph, start, goal, heuristic):
+    #Create a priority queue for the frontier and add the starting node with estimated total cost
+    frontier = createPriorityQueue()
+    enqueue(frontier, (heuristic[start], start))
+    
+    #Create a dictionary to store the cost of reaching each node
+    cost_so_far = createDictionary()
+    cost_so_far[start] = 0
+    
+    #Create a set to store explored nodes
+    explored = createSet()
+    
+    #While there are nodes to explore in the frontier
+    while not isEmpty(frontier):
+        # Get the node with the lowest estimated total cost (g + h)
+        current_estimated_total_cost, current_node = dequeue(frontier)
+        
+        #If the current node is the goal, return the cost
+        if current_node == goal:
+            return cost_so_far[current_node]
+        
+        #Add the current node to the explored set
+        add(explored, current_node)
+        
+        #Explore the neighbors of the current node
+        for neighbor, cost in neighbors(graph, current_node):
+            new_cost = cost_so_far[current_node] + cost
+            estimated_total_cost = new_cost + heuristic[neighbor]
+            
+            #Only explore the neighbor if it hasn't been explored or a cheaper path is found
+            if neighbor not in explored and (neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]):
+                cost_so_far[neighbor] = new_cost
+                enqueue(frontier, (estimated_total_cost, neighbor))
+    
+    #If the goal is not reachable, return -1
+    return -1

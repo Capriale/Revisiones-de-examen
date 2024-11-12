@@ -1,0 +1,30 @@
+#Uniform Cost Search pseudocode
+
+function UniformCostSearch(graph, start, goal):
+    #Create a priority queue for the frontier and add the starting node with cost 0
+    frontier = createPriorityQueue()
+    enqueue(frontier, (0, start))
+    
+    #Create a dictionary to store the cost of reaching each node
+    cost_so_far = createDictionary()
+    cost_so_far[start] = 0
+    
+    # While there are nodes to explore in the frontier
+    while not isEmpty(frontier):
+        # Get the node with the lowest cost
+        current_cost, current_node = dequeue(frontier)
+        
+        # If the goal is reached, return the cost
+        if current_node == goal:
+            return current_cost
+        
+        # Explore the neighbors of the current node
+        for neighbor, cost in neighbors(graph, current_node):
+            new_cost = current_cost + cost
+            # If the neighbor hasn't been visited or a cheaper path is found
+            if neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]:
+                cost_so_far[neighbor] = new_cost
+                enqueue(frontier, (new_cost, neighbor))
+    
+    # If the goal is not reachable, return -1
+    return -1

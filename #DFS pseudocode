@@ -1,0 +1,43 @@
+#DFS pseudocode
+
+function findTreasureDFS(island, start_x, start_y, treasure_x, treasure_y):
+    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+
+    visited = createSet()
+
+    result = dfs(island, start_x, start_y, treasure_x, treasure_y, visited, 0)
+    
+    #If the result is None, the treasure is not reachable
+    if result is None:
+        return -1
+    else:
+        return result
+
+function dfs(island, current_x, current_y, treasure_x, treasure_y, visited, steps):
+    #If the treasure was is reached, return the number of steps
+    if current_x == treasure_x and current_y == treasure_y:
+        return steps
+
+    #Mark the current position as visited
+    add(visited, (current_x, current_y))
+
+    #Explore the neighbors
+    for direction in directions:
+        next_x = current_x + direction[0]
+        next_y = current_y + direction[1]
+
+        #Check if the next position is in the grid and is not an obstacle or visited
+        if isValid(island, next_x, next_y) and (next_x, next_y) not in visited:
+            #Recursively explore the next position
+            result = dfs(island, next_x, next_y, treasure_x, treasure_y, visited, steps + 1)
+            if result is not None:
+                return result  # If the treasure is found, return the result
+
+    #unmark the current position if needed
+    remove(visited, (current_x, current_y))
+
+    #If the treasure is not found, return None
+    return None
+
+function isValid(island, x, y):
+    return x >= 0 and x < numberOfRows(island) and y >= 0 and y < numberOfColumns(island) and island[x][y] != 1
