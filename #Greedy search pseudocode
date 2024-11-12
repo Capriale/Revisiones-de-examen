@@ -1,0 +1,29 @@
+#Greedy search pseudocode
+
+function GreedySearch(graph, start, goal, heuristic):
+    #Create a priority queue for the frontier and add the starting node with heuristic cost
+    frontier = createPriorityQueue()
+    enqueue(frontier, (heuristic[start], start))
+    
+    #Create a set to store explored nodes
+    explored = createSet()
+    
+    #While there are nodes to explore in the frontier
+    while not isEmpty(frontier):
+        #Get the node with the lowest heuristic cost
+        current_heuristic_cost, current_node = dequeue(frontier)
+        
+        #If the goal is reached, return the node
+        if current_node == goal:
+            return current_node
+        
+        #Add the current node to the explored set
+        add(explored, current_node)
+        
+        #Explore the neighbors of the current node
+        for neighbor, cost in neighbors(graph, current_node):
+            if neighbor not in explored:
+                enqueue(frontier, (heuristic[neighbor], neighbor))
+    
+    #If the goal is not reachable, return -1
+    return -1
